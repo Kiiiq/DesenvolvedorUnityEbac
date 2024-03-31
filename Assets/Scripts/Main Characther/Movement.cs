@@ -13,24 +13,30 @@ public class Movement : MonoBehaviour
 
     public KeyCode Left = KeyCode.LeftArrow, Right = KeyCode.RightArrow, Jump = KeyCode.Z, Dash = KeyCode.LeftShift;
 
+    [Header("\n\nSpeed")]
     public float Speed = 5;
+    
+    [Header("\n\nJump")]
     public float JumpDistance = 10;
     public float jumpTime = 5;
-    public float Gravity = 10;
-    public float DashingMultipliyer;
-    public float DashDuration;
+    private float Gravity = 10;
     public float SpareJumpTime;
 
+    [Header("\n\nDash")]
+    public float DashingMultipliyer;
+    public float DashDuration;
 
+
+    [Header("\n\nStates")]
     public bool isDead;
-    private bool onCollision;
-    private bool jumping;
-    private bool facingRight;
-    private bool ableToDash;
-    private bool isDashing;
-    private bool ableToJump;
+    public bool onFloor;
+    public bool jumping;
+    public bool facingRight;
+    public bool ableToDash;
+    public bool isDashing;
+    public bool ableToJump;
 
-    [Header("Animation")]
+    [Header("\n\nAnimation")]
 
 
     public float originalY;
@@ -47,8 +53,9 @@ public class Movement : MonoBehaviour
         if (!isDead)
         {
             HorizontalMove();
-            VerticalMove();
+            JumpFunction();
             DashChecker();
+            
         }
     }
 
@@ -83,11 +90,11 @@ public class Movement : MonoBehaviour
         }
     }
 
-    private void VerticalMove()
+    protected virtual void JumpFunction()
     {
         if (!isDashing)
         {
-            if (Input.GetKey(Jump) && onCollision == true && ableToJump)
+            if (Input.GetKey(Jump) && onFloor == true && ableToJump)
             {
                 ableToJump=true;
                 jumping = true;
@@ -107,7 +114,8 @@ public class Movement : MonoBehaviour
         }
     }
 
-    IEnumerator Dashing()
+    //Verifica a direcao que o personagem ta olhando, Mostra que ele esta dashando, e desabilita a habilidade de Dashar dnv
+    protected virtual IEnumerator Dashing()
     {
         if (facingRight){
             
@@ -135,6 +143,7 @@ public class Movement : MonoBehaviour
         yield return null;
     }
 
+    //Animacao pra o dash
     IEnumerator DashingAnimation() 
     {
         playerRigidbody.transform.DOScaleX(originalX*xDashStretch, DashAnimationDuration);
@@ -144,14 +153,17 @@ public class Movement : MonoBehaviour
         playerRigidbody.transform.DOScaleY(originalY, DashDuration - DashAnimationDuration);
     }
 
-
-    private void OnCollisionStay2D(Collision2D collision)
+    //Verifica se ele ta em colisao
+    protected virtual void OnCollisionStay2D(Collision2D collision)
     {
         if (!collision.gameObject.CompareTag("Ceilling"))
         {
+            //Checa o tipo de colisao que ele ta tendo
+            if (collision.gameObject.CompareTag("Floor"))
+            {
+                onFloor = true;
+            }
 
-
-            onCollision = true;
             ableToDash = true;
             ableToJump = true;
 
@@ -162,18 +174,25 @@ public class Movement : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    //Invoca as co-rotinas de limite de pulo
+    protected virtual void OnCollisionExit2D(Collision2D collision)
     {
-        StartCoroutine(CollisionExit());
-        StartCoroutine(SpareTimetojump());
+        if (collision.gameObject.CompareTag("Floor"))
+        {
+            StartCoroutine(FloorExit());
+            StartCoroutine(SpareTimetojump());
+        }
     }
-
-    IEnumerator CollisionExit()
+    //Os dois seguem a mesma logica, limita o tanto que o personagem vai pular
+    IEnumerator FloorExit()
     {
         yield return new WaitForSeconds(jumpTime);
-        onCollision=false;
+        onFloor=false;
     }
 
+
+
+    //Da um tempo pra o player pular mesmo que ja tenha saido do chao
     IEnumerator SpareTimetojump()
     {
         if (!jumping)
