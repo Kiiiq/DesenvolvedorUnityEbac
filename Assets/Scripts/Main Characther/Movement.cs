@@ -36,6 +36,12 @@ public class Movement : MonoBehaviour
     public bool isDashing;
     public bool ableToJump;
 
+    [Header("\n\nUpgrades")]
+    public bool doubleJump=false;
+    public bool ableToDoubleJump;
+    public bool ShadowDash;
+
+
     [Header("\n\nAnimation")]
 
 
@@ -53,7 +59,7 @@ public class Movement : MonoBehaviour
         if (!isDead)
         {
             HorizontalMove();
-            JumpFunction();
+            if (!doubleJump) {JumpFunction();} else { DoubleJumpFunction();}
             DashChecker();
             
         }
@@ -89,7 +95,7 @@ public class Movement : MonoBehaviour
             }
         }
     }
-
+    //Funcao pra pular sem o upgrade de double jump
     protected virtual void JumpFunction()
     {
         if (!isDashing)
@@ -112,6 +118,38 @@ public class Movement : MonoBehaviour
                 ableToJump = false;
             }
         }
+    }
+    
+    
+    //Funcao pra pular com o upgrade de double jump
+    protected virtual void DoubleJumpFunction()
+    {
+        if (Input.GetKey(Jump) && onFloor == true && ableToJump)
+        {
+            ableToJump = true;
+            jumping = true;
+            playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, JumpDistance);
+            playerRigidbody.gravityScale = 0;
+        } else if (!ableToJump && ableToDoubleJump && Input.GetKey(Jump))
+        {
+            StartCoroutine(StopDoubleJump());
+            jumping = true;
+            playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, JumpDistance);
+            playerRigidbody.gravityScale = 0;
+        }
+        else
+        {
+            jumping = false;
+            playerRigidbody.gravityScale = Gravity;
+        }
+
+        if (Input.GetKeyUp(Jump) && ableToJump)
+        {
+            ableToJump = false;
+        } else if (Input.GetKeyUp(Jump) && !ableToJump && ableToDoubleJump) { 
+            ableToDoubleJump = false;
+        }
+
     }
 
     //Verifica a direcao que o personagem ta olhando, Mostra que ele esta dashando, e desabilita a habilidade de Dashar dnv
@@ -166,6 +204,7 @@ public class Movement : MonoBehaviour
 
             ableToDash = true;
             ableToJump = true;
+            ableToDoubleJump = true;
 
             if (collision.gameObject.CompareTag("Floor"))
             {
@@ -203,4 +242,9 @@ public class Movement : MonoBehaviour
         yield return null;
     }
 
+    IEnumerator StopDoubleJump()
+    {
+        yield return new WaitForSeconds(jumpTime/1.3f);
+        ableToDoubleJump = false;
+    }
 }
