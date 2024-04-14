@@ -21,7 +21,6 @@ namespace ReusableScripts
                 Destroy(gameObject);
             }
             DontDestroyOnLoad(GetComponent<T>());
-        }
-        
+        }       
     }
 }

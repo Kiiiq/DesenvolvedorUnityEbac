@@ -8,6 +8,13 @@ TagManager:
   - Wall
   - Ceilling
   - Spikes
+  - Attack
+<<<<<<< Updated upstream
+=======
+  - Enemy
+  - SafePlace
+  - Collectable
+>>>>>>> Stashed changes
   layers:
   - Default
   - TransparentFX
