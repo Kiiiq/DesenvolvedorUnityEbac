@@ -9,12 +9,9 @@ public class HitScript : MonoBehaviour
     public float attackDuration;
     public Movement movement;
     public Actions actions;
-<<<<<<< Updated upstream
-=======
     public HealthManager healthManager;
     public Rigidbody2D hittedRigbody;
     public StateMachine stateMachine;
->>>>>>> Stashed changes
 
     // Start is called before the first frame update
     void Start()
@@ -33,20 +30,12 @@ public class HitScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Spikes")) { 
+        if (collision.CompareTag("Spikes") || collision.CompareTag("Enemy")) { 
             switch (actions.direction) {
-<<<<<<< Updated upstream
-                case 0: movement.playerRigidbody.velocity = new Vector2(-20,movement.playerRigidbody.velocity.y); break;
-                case 1: movement.playerRigidbody.velocity = new Vector2(20, movement.playerRigidbody.velocity.y); break;
-                case 2: movement.playerRigidbody.velocity = new Vector2(movement.playerRigidbody.velocity.x, -20); break;
-                case 3: movement.playerRigidbody.velocity = new Vector2(movement.playerRigidbody.velocity.x, 30); movement.ableToDash = true; movement.ableToDoubleJump = true; break;
-            }
-        }
-=======
-                case 0: movement.playerRigidbody.velocity = new Vector2(-10,movement.playerRigidbody.velocity.y); break;
-                case 1: movement.playerRigidbody.velocity = new Vector2(10, movement.playerRigidbody.velocity.y); break;
-                case 2: movement.playerRigidbody.velocity = new Vector2(movement.playerRigidbody.velocity.x, -10); break;
-                case 3: movement.playerRigidbody.velocity = new Vector2(movement.playerRigidbody.velocity.x, 30); stateMachine.ableToDash = true; stateMachine.ableToDoubleJump = true; break;
+                case 0: stateMachine.playerRigidbody.velocity = new Vector2(-10,stateMachine.playerRigidbody.velocity.y); break;
+                case 1: stateMachine.playerRigidbody.velocity = new Vector2(10, stateMachine.playerRigidbody.velocity.y); break;
+                case 2: stateMachine.playerRigidbody.velocity = new Vector2(stateMachine.playerRigidbody.velocity.x, -10); break;
+                case 3: stateMachine.playerRigidbody.velocity = new Vector2(stateMachine.playerRigidbody.velocity.x, 30); stateMachine.ableToDash = true; stateMachine.ableToDoubleJump = true; break;
             }
         }
 
@@ -62,7 +51,6 @@ public class HitScript : MonoBehaviour
             healthManager.Takedamage(actions.damage, movement.transform.position.x);
             
         }
->>>>>>> Stashed changes
         
     }
 }

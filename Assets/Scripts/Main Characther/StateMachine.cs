@@ -5,12 +5,24 @@ using UnityEngine;
 
 public class StateMachine : MonoBehaviour
 {
+    [Header("References")]
+    
+    public Movement movement;
+    public HealthManager healthManager;
+    public SpriteRenderer sprite;
+    public GameObject Hitbox, Spell, Slash;
+    public Rigidbody2D playerRigidbody;
+    public Actions actions;
+    public BoxCollider2D boxCollider2D;
+    public Color originalColor;
+
     [Header ("Is Able To")]
 
     public bool ableToDash;
     public bool ableToJump;
     public bool ableToDoubleJump;
     public bool ableToSpell;
+    public bool ableToShadowDash;
 
     [Header("Upgrades")]
     public bool spellUpgraded;
@@ -28,4 +40,5 @@ public class StateMachine : MonoBehaviour
     public bool onFloor;
     public bool jumping;
     public bool isTakingKnockback;
+    public bool isImune;
 }

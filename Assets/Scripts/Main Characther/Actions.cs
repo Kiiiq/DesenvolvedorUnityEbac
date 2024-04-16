@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -6,55 +7,35 @@ using UnityEngine;
 
 public class Actions : MonoBehaviour
 {
-    public enum attacking { Right = 0, Left = 1, Up = 2, Down = 3 };
+    [HideInInspector] public enum attacking { Right = 0, Left = 1, Up = 2, Down = 3 };
 
-    public Vector3 attackLeft = new Vector3(0, 180, 0);
-    public Vector3 attackUp = new Vector3(0, 0, 90);
-    public Vector3 attackRight = new Vector3(0, 0, 0);
-    public Vector3 attackDown = new Vector3(180, 0, 90);
-
-<<<<<<< Updated upstream
-    public Vector3 attackLeft = new Vector3(0,0,180);
-    public Vector3 attackUp = new Vector3(0,0,90);
-    public Vector3 attackRight = new Vector3(0,0,0);
-    public Vector3 attackDown = new Vector3(0,0,270);
+    [HideInInspector] public Vector3 attackLeft = new Vector3(0, 180, 0);
+    [HideInInspector] public Vector3 attackUp = new Vector3(0, 0, 90);
+    [HideInInspector] public Vector3 attackRight = new Vector3(0, 0, 0);
+    [HideInInspector] public Vector3 attackDown = new Vector3(180, 0, 90);
     
-=======
->>>>>>> Stashed changes
+    [Header("References")]
     public Movement movement;
     public StateMachine stateMachine;
     public HealthManager healthManager;
 
-<<<<<<< Updated upstream
-    public GameObject Hitbox, parent;
+    [Header("\n\nInput Keys")]
+    public KeyCode attackKey = KeyCode.X;
+    public KeyCode attackUpKey = KeyCode.UpArrow, attackDownKey = KeyCode.DownArrow, spellKey = KeyCode.A, slashKey = KeyCode.C, healKey=KeyCode.LeftControl;
 
-    public KeyCode attackKey = KeyCode.X, attackUpKey = KeyCode.UpArrow, attackDownKey = KeyCode.DownArrow;
+    [Header("\n\nParameters")]
+    public int damage;
+    public int direction, maxStamina, stamina, staminaToCast;
 
-    public bool isAttacking;
-=======
-    public GameObject Hitbox, Spell, Slash;
-
-    public KeyCode attackKey = KeyCode.X, attackUpKey = KeyCode.UpArrow, attackDownKey = KeyCode.DownArrow, spellKey = KeyCode.A, slashKey = KeyCode.C, healKey=KeyCode.LeftControl;
->>>>>>> Stashed changes
-
-    public int damage, direction;
-
-<<<<<<< Updated upstream
-    public float attackSpeed;
-    
-
-    void Update()
-    {
-       if(Input.GetKeyDown(attackKey) && !movement.isDashing && !isAttacking)
-        {
-            StartCoroutine(Attack());
-=======
     public float attackSpeed, timeToCast, timeToHeal;
 
-
+    [Header("\n\nAnimation")]
+    public float healAnimation;
+    public float healScaleX, healScaleY;
 
     void Update()
     {
+
         if(!stateMachine.isDashing && !stateMachine.isAttacking && !stateMachine.isCasting && !stateMachine.isHealing) 
         { 
             if (Input.GetKeyDown(attackKey))
@@ -71,18 +52,13 @@ public class Actions : MonoBehaviour
             }
             if (Input.GetKeyDown(healKey) && stamina >= staminaToCast && healthManager.currentLife < healthManager.maxLife)
             {
+                StopAllCoroutines();
+                StartCoroutine(HealAnimation());
                 StartCoroutine(Heal());
                 stateMachine.isHealing = true;
                 
             }
             
-        }
-
-        if (Input.GetKeyUp(healKey))
-        {
-            StopAllCoroutines();
-            stateMachine.isHealing = false;
->>>>>>> Stashed changes
         }
     }
 
@@ -92,7 +68,7 @@ public class Actions : MonoBehaviour
         {
             direction = (int)attacking.Up;
             stateMachine.isAttacking = true;
-            Instantiate(Hitbox, this.transform.position + new Vector3(0, 1, 0), Quaternion.Euler(attackUp), this.transform);
+            Instantiate(stateMachine.Hitbox, this.transform.position + new Vector3(0, 1, 0), Quaternion.Euler(attackUp), this.transform);
             yield return new WaitForSeconds(attackSpeed);
             stateMachine.isAttacking = false;
 
@@ -102,7 +78,7 @@ public class Actions : MonoBehaviour
             direction = (int)attacking.Down;
             Debug.Log("Down");
             stateMachine.isAttacking = true;
-            Instantiate(Hitbox, this.transform.position + new Vector3(0, -1, 0), Quaternion.Euler(attackDown), this.transform);
+            Instantiate(stateMachine.Hitbox, this.transform.position + new Vector3(0, -1, 0), Quaternion.Euler(attackDown), this.transform);
             yield return new WaitForSeconds(attackSpeed);
 
             stateMachine.isAttacking = false;
@@ -111,7 +87,7 @@ public class Actions : MonoBehaviour
         {
             direction = (int)attacking.Right;
             stateMachine.isAttacking = true;
-            Instantiate(Hitbox, this.transform.position + new Vector3(0.5f, 0, 0), Quaternion.Euler(attackRight), this.transform);
+            Instantiate(stateMachine.Hitbox, this.transform.position + new Vector3(0.5f, 0, 0), Quaternion.Euler(attackRight), this.transform);
             yield return new WaitForSeconds(attackSpeed);
             stateMachine.isAttacking = false;
         }
@@ -119,14 +95,11 @@ public class Actions : MonoBehaviour
         {
             direction = (int)attacking.Left;
             stateMachine.isAttacking = true;
-            Instantiate(Hitbox, this.transform.position + new Vector3(-0.5f, 0, 0), Quaternion.Euler(attackLeft), this.transform);
+            Instantiate(stateMachine.Hitbox, this.transform.position + new Vector3(-0.5f, 0, 0), Quaternion.Euler(attackLeft), this.transform);
             yield return new WaitForSeconds(attackSpeed);
             stateMachine.isAttacking = false;
         }
     }
-<<<<<<< Updated upstream
-}
-=======
 
     IEnumerator CastSpell()
     {
@@ -135,11 +108,11 @@ public class Actions : MonoBehaviour
             stamina -= staminaToCast;
             Debug.Log("Casting");
             stateMachine.isCasting = true;
-            movement.playerRigidbody.velocity = new Vector2(0, 0);
-            movement.playerRigidbody.gravityScale = 0;
+            stateMachine.playerRigidbody.velocity = new Vector2(0, 0);
+            stateMachine.playerRigidbody.gravityScale = 0;
             yield return new WaitForSeconds(timeToCast);
-            Instantiate(Spell, this.transform.position, Quaternion.Euler(0, 0, 0), this.transform);
-            movement.playerRigidbody.gravityScale = movement.Gravity;
+            Instantiate(stateMachine.Spell, this.transform.position, Quaternion.Euler(0, 0, 0), this.transform);
+            stateMachine.playerRigidbody.gravityScale = movement.Gravity;
             stateMachine.isCasting = false;
         }
         else
@@ -147,15 +120,14 @@ public class Actions : MonoBehaviour
             stamina -= staminaToCast;
             Debug.Log("Casting");
             stateMachine.isCasting = true;
-            movement.playerRigidbody.velocity = new Vector2(0, 0);
-            movement.playerRigidbody.gravityScale = 0;
+            stateMachine.playerRigidbody.velocity = new Vector2(0, 0);
+            stateMachine.playerRigidbody.gravityScale = 0;
             yield return new WaitForSeconds(timeToCast);
-            Instantiate(Spell, this.transform.position, Quaternion.Euler(0, 180, 0), this.transform);
-            movement.playerRigidbody.gravityScale = movement.Gravity;
+            Instantiate(stateMachine.Spell, this.transform.position, Quaternion.Euler(0, 180, 0), this.transform);
+            stateMachine.playerRigidbody.gravityScale = movement.Gravity;
             stateMachine.isCasting = false;
         }
     }
->>>>>>> Stashed changes
 
     IEnumerator CastSlash()
     {
@@ -164,11 +136,11 @@ public class Actions : MonoBehaviour
             stamina -= staminaToCast;
             Debug.Log("Slashing");
             stateMachine.isCasting = true;
-            movement.playerRigidbody.velocity = new Vector2(0, 0);
-            movement.playerRigidbody.gravityScale = 0;
+            stateMachine.playerRigidbody.velocity = new Vector2(0, 0);
+            stateMachine.playerRigidbody.gravityScale = 0;
             yield return new WaitForSeconds(timeToCast);
-            Instantiate(Slash, this.transform.position, Quaternion.Euler(0, 0, 0), this.transform);
-            movement.playerRigidbody.gravityScale = movement.Gravity;
+            Instantiate(stateMachine.Slash, this.transform.position, Quaternion.Euler(0, 0, 0), this.transform);
+            stateMachine.playerRigidbody.gravityScale = movement.Gravity;
             stateMachine.isCasting = false;
         }
         else
@@ -176,11 +148,11 @@ public class Actions : MonoBehaviour
             stamina -= staminaToCast;
             Debug.Log("Slashing");
             stateMachine.isCasting = true;
-            movement.playerRigidbody.velocity = new Vector2(0, 0);
-            movement.playerRigidbody.gravityScale = 0;
+            stateMachine.playerRigidbody.velocity = new Vector2(0, 0);
+            stateMachine.playerRigidbody.gravityScale = 0;
             yield return new WaitForSeconds(timeToCast*2f);
-            Instantiate(Slash, this.transform.position, Quaternion.Euler(0, 180, 0), this.transform);
-            movement.playerRigidbody.gravityScale = movement.Gravity;
+            Instantiate(stateMachine.Slash, this.transform.position, Quaternion.Euler(0, 180, 0), this.transform);
+            stateMachine.playerRigidbody.gravityScale = movement.Gravity;
             stateMachine.isCasting = false;
         }
     }
@@ -197,5 +169,17 @@ public class Actions : MonoBehaviour
         Debug.Log("Healing Completed");
         stateMachine.isHealing = false;
         StopAllCoroutines();
+    }
+
+    IEnumerator HealAnimation()
+    {
+        stateMachine.playerRigidbody.transform.DOScaleY((movement.originalY*healScaleY), healAnimation);
+        stateMachine.playerRigidbody.transform.DOScaleX((movement.originalX * healScaleX), healAnimation);
+        stateMachine.sprite.DOColor(Color.white, healAnimation);
+        yield return new WaitForSeconds(healAnimation);
+        stateMachine.playerRigidbody.transform.DOScaleY(movement.originalY, healAnimation-timeToHeal);
+        stateMachine.playerRigidbody.transform.DOScaleX(movement.originalX, healAnimation - timeToHeal);
+        stateMachine.sprite.DOColor(stateMachine.originalColor, timeToHeal - healAnimation);
+
     }
 }

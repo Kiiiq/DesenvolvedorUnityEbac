@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,13 +15,7 @@ public class HealthManager : MonoBehaviour
     public int maxLife;
     public int currentLife=0;
 
-<<<<<<< Updated upstream:Assets/Scripts/Reusable Scripts/Health Manager.cs
-    public Movement movement;
-
-    public float deathAnimation;
-=======
     public float deathAnimation, knockbackTime;
->>>>>>> Stashed changes:Assets/Scripts/Reusable Scripts/HealthManager.cs
 
 
     public void Awake()
@@ -34,10 +29,18 @@ public class HealthManager : MonoBehaviour
     public void Takedamage(int Damage, float positionX)
     {
         StartCoroutine(TakeKnockback(positionX));
-        currentLife -= Damage;
+        if (this.gameObject.CompareTag("Player"))
+        {
+            if (!stateMachine.isImune) {
+                StartCoroutine(ImunityFrames());
+                currentLife -= Damage;
+            }                      
+        }
+        else { currentLife -= Damage; }
+
 
         if (currentLife <= 0) {
-            StartCoroutine(Kill(movement.isDead));
+            StartCoroutine(Kill(isDead));
         }
     }
 
@@ -45,9 +48,13 @@ public class HealthManager : MonoBehaviour
     {
         isDead = true;
         yield return new WaitForSeconds(deathAnimation);
-        Destroy(this.gameObject);
-        if (stateMachine!= null ) { 
+        if (stateMachine != null && this.gameObject.CompareTag("Player"))
+        {
             stateMachine.isDead = isDead;
+        }
+        else
+        {
+            Destroy(this.gameObject);
         }
     }
 
@@ -67,5 +74,16 @@ public class HealthManager : MonoBehaviour
             yield return new WaitForSeconds(knockbackTime);
             stateMachine.isTakingKnockback = false;
         }
+    }
+
+    public IEnumerator ImunityFrames()
+    {
+        stateMachine.sprite.DOBlendableColor(Color.red, 0.3f);
+        stateMachine.isImune = true;
+        yield return new WaitForSeconds(0.3f);
+        stateMachine.sprite.DOColor(stateMachine.originalColor, 0.2f);
+        yield return new WaitForSeconds(0.2f);
+        stateMachine.isImune = false;
+        
     }
 }
