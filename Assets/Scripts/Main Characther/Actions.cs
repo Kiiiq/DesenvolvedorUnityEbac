@@ -36,7 +36,7 @@ public class Actions : MonoBehaviour
     void Update()
     {
 
-        if(!stateMachine.isDashing && !stateMachine.isAttacking && !stateMachine.isCasting && !stateMachine.isHealing) 
+        if(!stateMachine.isDashing && !stateMachine.isAttacking && !stateMachine.isCasting && !stateMachine.isHealing && !stateMachine.isDead) 
         { 
             if (Input.GetKeyDown(attackKey))
             {

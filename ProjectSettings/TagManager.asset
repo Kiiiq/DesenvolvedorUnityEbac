@@ -12,6 +12,8 @@ TagManager:
   - Enemy
   - SafePlace
   - Collectable
+  - Turning Point
+  - TpPlace
   layers:
   - Default
   - TransparentFX

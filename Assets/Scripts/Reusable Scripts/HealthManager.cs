@@ -10,6 +10,7 @@ public class HealthManager : MonoBehaviour
     public Transform thisTransform;
     public Rigidbody2D thisRigidbody;
     public StateMachine stateMachine;
+    public EnemyBase enemy;
 
     public bool isDead;
     public int maxLife;
@@ -28,7 +29,7 @@ public class HealthManager : MonoBehaviour
 
     public void Takedamage(int Damage, float positionX)
     {
-        StartCoroutine(TakeKnockback(positionX));
+        
         if (this.gameObject.CompareTag("Player"))
         {
             if (!stateMachine.isImune) {
@@ -36,7 +37,14 @@ public class HealthManager : MonoBehaviour
                 currentLife -= Damage;
             }                      
         }
-        else { currentLife -= Damage; }
+        else {  
+            if (this.gameObject.CompareTag("Enemy"))
+            {
+                enemy = GetComponent<EnemyBase>();
+            }
+            currentLife -= Damage;
+        }
+        StartCoroutine(TakeKnockback(positionX));
 
 
         if (currentLife <= 0) {
@@ -64,14 +72,14 @@ public class HealthManager : MonoBehaviour
         {
             stateMachine.isTakingKnockback = true;
             thisRigidbody.velocity = new Vector2(10, 10);
-            yield return new WaitForSeconds(knockbackTime);
+            yield return new WaitForSeconds(knockbackTime/2);
             stateMachine.isTakingKnockback = false;
         }
         else
         {
             stateMachine.isTakingKnockback = true;
             thisRigidbody.velocity = new Vector2(-10, 10);
-            yield return new WaitForSeconds(knockbackTime);
+            yield return new WaitForSeconds(knockbackTime/2);
             stateMachine.isTakingKnockback = false;
         }
     }
@@ -80,7 +88,9 @@ public class HealthManager : MonoBehaviour
     {
         stateMachine.sprite.DOBlendableColor(Color.red, 0.3f);
         stateMachine.isImune = true;
+        stateMachine.boxCollider2D.isTrigger = true;
         yield return new WaitForSeconds(0.3f);
+        stateMachine.boxCollider2D.isTrigger = false;
         stateMachine.sprite.DOColor(stateMachine.originalColor, 0.2f);
         yield return new WaitForSeconds(0.2f);
         stateMachine.isImune = false;
