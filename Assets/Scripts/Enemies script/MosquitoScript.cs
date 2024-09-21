@@ -16,6 +16,10 @@ public class MosquitoScript : MonoBehaviour
     private void Start()
     {
         mosquito = GetComponent<Rigidbody2D>();
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     }
     // Update is called once per frame
     void Update()
@@ -24,26 +28,43 @@ public class MosquitoScript : MonoBehaviour
         {
             DistanceCalculations();
             ChasePlayer(new Vector2(speedX,speedY));
+<<<<<<< Updated upstream
         } else
         {
             StartCoroutine(IdleMove());
         }
+=======
+        } 
+>>>>>>> Stashed changes
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.transform.CompareTag("Player"))
         {
+<<<<<<< Updated upstream
+=======
+            StopAllCoroutines();
+>>>>>>> Stashed changes
             idle = false;
             player = collision.GetComponent<Transform>();
         }
     }
 
     public IEnumerator IdleMove()
+<<<<<<< Updated upstream
     {
         transform.DOMoveY(speedX/10, 1);
         yield return new WaitForSeconds(1);
         transform.DOMoveY(-speedX/10, 1);
+=======
+    { 
+        mosquito.velocity = new Vector2(0,- 2);
+        yield return new WaitForSeconds(1);
+        mosquito.velocity = new Vector2(0, 2);
+        StartCoroutine(IdleMove());
+        
+>>>>>>> Stashed changes
     }
 
     public void ChasePlayer(Vector2 Velocity)

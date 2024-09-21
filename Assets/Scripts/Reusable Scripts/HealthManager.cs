@@ -58,7 +58,12 @@ public class HealthManager : MonoBehaviour
         yield return new WaitForSeconds(deathAnimation);
         if (stateMachine != null && this.gameObject.CompareTag("Player"))
         {
+<<<<<<< Updated upstream
             stateMachine.isDead = isDead;
+=======
+            currentLife = maxLife;
+
+>>>>>>> Stashed changes
         }
         else
         {
@@ -86,12 +91,18 @@ public class HealthManager : MonoBehaviour
 
     public IEnumerator ImunityFrames()
     {
+<<<<<<< Updated upstream
         stateMachine.sprite.DOBlendableColor(Color.red, 0.3f);
+=======
+>>>>>>> Stashed changes
         stateMachine.isImune = true;
         stateMachine.boxCollider2D.isTrigger = true;
         yield return new WaitForSeconds(0.3f);
         stateMachine.boxCollider2D.isTrigger = false;
+<<<<<<< Updated upstream
         stateMachine.sprite.DOColor(stateMachine.originalColor, 0.2f);
+=======
+>>>>>>> Stashed changes
         yield return new WaitForSeconds(0.2f);
         stateMachine.isImune = false;
         
