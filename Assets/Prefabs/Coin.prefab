@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coinValue: 0
+  rotationSpeed: 90
 --- !u!61 &-8889010601218771355
 BoxCollider2D:
   m_ObjectHideFlags: 0

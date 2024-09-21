@@ -9,12 +9,11 @@ TagManager:
   - Ceilling
   - Spikes
   - Attack
-<<<<<<< Updated upstream
-=======
   - Enemy
   - SafePlace
   - Collectable
->>>>>>> Stashed changes
+  - Turning Point
+  - TpPlace
   layers:
   - Default
   - TransparentFX
@@ -51,7 +50,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Layer 1
-    uniqueID: 2919393867
     locked: 0

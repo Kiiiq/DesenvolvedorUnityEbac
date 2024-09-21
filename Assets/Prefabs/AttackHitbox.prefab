@@ -91,9 +91,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 383780a83f465b5498f867bd074ef05b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackDuration: 0.2
+  attackDuration: 0.15
   movement: {fileID: 0}
   actions: {fileID: 0}
+  healthManager: {fileID: 0}
+  hittedRigbody: {fileID: 0}
+  stateMachine: {fileID: 0}
 --- !u!1 &1400765638818668289
 GameObject:
   m_ObjectHideFlags: 0

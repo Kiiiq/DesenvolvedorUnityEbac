@@ -19,9 +19,14 @@ public class Spikes : MonoBehaviour
             {
                 var safePlace = collision.gameObject.GetComponent<Movement>();
                 safePlace.TpToSafePlace();
-                health.Takedamage(Damage,this.transform.position.x);
+                health.Takedamage(Damage, this.transform.position.x);
                 Debug.Log("Damage");
             }
+            else if (collision.transform.CompareTag("Enemy"))
+            {
+                Destroy(collision.gameObject);
+            }
+            
         }
     }
 }
