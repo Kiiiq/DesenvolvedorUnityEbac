@@ -9,20 +9,13 @@ public class StateMachine : MonoBehaviour
     
     public Movement movement;
     public HealthManager healthManager;
-<<<<<<< Updated upstream
-    public SpriteRenderer sprite;
-=======
     public GameObject sprite;
->>>>>>> Stashed changes
     public GameObject Hitbox, Spell, Slash;
     public Rigidbody2D playerRigidbody;
     public Actions actions;
     public BoxCollider2D boxCollider2D;
-<<<<<<< Updated upstream
-    public Color originalColor;
-=======
     public Animator animator;
->>>>>>> Stashed changes
+
 
     [Header ("Is Able To")]
 
@@ -49,9 +42,7 @@ public class StateMachine : MonoBehaviour
     public bool jumping;
     public bool isTakingKnockback;
     public bool isImune;
-<<<<<<< Updated upstream
-=======
 
     public bool gambiarra;
->>>>>>> Stashed changes
+
 }

@@ -176,17 +176,9 @@ public class Actions : MonoBehaviour
     {
         stateMachine.playerRigidbody.transform.DOScaleY((movement.originalY*healScaleY), healAnimation);
         stateMachine.playerRigidbody.transform.DOScaleX((movement.originalX * healScaleX), healAnimation);
-<<<<<<< Updated upstream
-        stateMachine.sprite.DOColor(Color.white, healAnimation);
         yield return new WaitForSeconds(healAnimation);
         stateMachine.playerRigidbody.transform.DOScaleY(movement.originalY, healAnimation-timeToHeal);
         stateMachine.playerRigidbody.transform.DOScaleX(movement.originalX, healAnimation - timeToHeal);
-        stateMachine.sprite.DOColor(stateMachine.originalColor, timeToHeal - healAnimation);
 
-=======
-        yield return new WaitForSeconds(healAnimation);
-        stateMachine.playerRigidbody.transform.DOScaleY(movement.originalY, healAnimation-timeToHeal);
-        stateMachine.playerRigidbody.transform.DOScaleX(movement.originalX, healAnimation - timeToHeal);
->>>>>>> Stashed changes
     }
 }

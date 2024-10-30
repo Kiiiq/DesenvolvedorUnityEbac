@@ -21,7 +21,10 @@ public class Movement : MonoBehaviour
     public KeyCode Left = KeyCode.LeftArrow, Right = KeyCode.RightArrow, Jump = KeyCode.Z, Dash = KeyCode.LeftShift;
 
     [Header("\n\nSpeed")]
-    
+    [SerializeField]
+
+    public float actualSpeedx;
+    public float actualSpeedy;
     public float Speed = 5;
     
     [Header("\n\nJump")]
@@ -71,15 +74,14 @@ public class Movement : MonoBehaviour
             
         }
 
-<<<<<<< Updated upstream
-=======
         if (stateMachine.gambiarra)
         {
             stateMachine.gambiarra = false;
             this.transform.position = spawnPoint.transform.position;
         }
-
->>>>>>> Stashed changes
+        actualSpeedx= stateMachine.playerRigidbody.velocity.x;
+        actualSpeedy = stateMachine.playerRigidbody.velocity.y;
+        
     }
 
     //Tp pra uma posicao segura, quando ele cai em algum lugar que da dano
@@ -115,10 +117,7 @@ public class Movement : MonoBehaviour
         {
             if (Input.GetKey(Left))
             {
-<<<<<<< Updated upstream
-=======
                 stateMachine.animator.SetBool("Walk",true);
->>>>>>> Stashed changes
                 stateMachine.playerRigidbody.velocity = new Vector2(-Speed, stateMachine.playerRigidbody.velocity.y);
                 stateMachine.facingRight = false;
                 if (stateMachine.sprite.transform.rotation != new Quaternion(0, 180, 0, 0))
@@ -128,10 +127,7 @@ public class Movement : MonoBehaviour
             }
             else if (Input.GetKey(Right))
             {
-<<<<<<< Updated upstream
-=======
                 stateMachine.animator.SetBool("Walk", true);
->>>>>>> Stashed changes
                 stateMachine.playerRigidbody.velocity = new Vector2(Speed, stateMachine.playerRigidbody.velocity.y);
                 stateMachine.facingRight = true;
                 if (stateMachine.sprite.transform.rotation != new Quaternion(0, 0, 0, 0))
@@ -146,39 +142,12 @@ public class Movement : MonoBehaviour
             }
         }
     }
-<<<<<<< Updated upstream
+
 
     
     
     ////------------------------------------------------------------------------------------ // JUMP ZONE // -----------------------------------------------------------------------------
-    //Funcao pra pular sem o upgrade de double jump
-    protected virtual void JumpFunction()   
-    {
-        if (!stateMachine.isDashing && !stateMachine.isCasting && !stateMachine.isTakingKnockback)
-        {
-            if (Input.GetKey(Jump) && stateMachine.onFloor == true && stateMachine.ableToJump)
-            {
-                stateMachine.ableToJump =true;
-                stateMachine.jumping = true;
-                stateMachine.playerRigidbody.velocity = new Vector2(stateMachine.playerRigidbody.velocity.x, JumpDistance);
-                stateMachine.playerRigidbody.gravityScale = 0;
-            }
-            else
-            {
-                stateMachine.jumping = false;
-                stateMachine.playerRigidbody.gravityScale = Gravity;
-            }
-=======
->>>>>>> Stashed changes
-
-    
-    
-<<<<<<< Updated upstream
-    //Funcao pra pular com o upgrade de double jump
-=======
-    ////------------------------------------------------------------------------------------ // JUMP ZONE // -----------------------------------------------------------------------------
-    
->>>>>>> Stashed changes
+   
     protected virtual void DoubleJumpFunction() 
     {
         if(!stateMachine.isCasting && !stateMachine.isDashing && !stateMachine.isTakingKnockback)
@@ -189,42 +158,35 @@ public class Movement : MonoBehaviour
                 stateMachine.jumping = true;
                 stateMachine.playerRigidbody.velocity = new Vector2(stateMachine.playerRigidbody.velocity.x, JumpDistance);
                 stateMachine.playerRigidbody.gravityScale = 0;
-<<<<<<< Updated upstream
-            } else if (!stateMachine.ableToJump && stateMachine.ableToDoubleJump && Input.GetKey(Jump))
-=======
+                stateMachine.animator.SetBool("Jumping", true);
                 
             } else if (!stateMachine.ableToJump && stateMachine.ableToDoubleJump && stateMachine.doubleJump && Input.GetKey(Jump))
->>>>>>> Stashed changes
             {
                 StartCoroutine(StopDoubleJump());
                 stateMachine.jumping = true;
                 stateMachine.playerRigidbody.velocity = new Vector2(stateMachine.playerRigidbody.velocity.x, JumpDistance);
                 stateMachine.playerRigidbody.gravityScale = 0;
-<<<<<<< Updated upstream
-=======
-                
->>>>>>> Stashed changes
+                stateMachine.animator.SetBool("Jumping", true);
             }
             else
             {
                 stateMachine.jumping = false;
                 stateMachine.playerRigidbody.gravityScale = Gravity;
-<<<<<<< Updated upstream
-=======
             }
 
             if ((Input.GetKeyDown(Jump) && stateMachine.onFloor == true && stateMachine.ableToJump)|| (!stateMachine.ableToJump && stateMachine.ableToDoubleJump && stateMachine.doubleJump && Input.GetKeyDown(Jump)))
             {
-                stateMachine.animator.SetTrigger("Jump");
->>>>>>> Stashed changes
+             
             }
         }
         
         if (Input.GetKeyUp(Jump) && stateMachine.ableToJump)
         {
             stateMachine.ableToJump = false;
+            stateMachine.animator.SetBool("Jumping", false);
         } else if (Input.GetKeyUp(Jump) && !stateMachine.ableToJump && stateMachine.ableToDoubleJump) {
             stateMachine.ableToDoubleJump = false;
+            stateMachine.animator.SetBool("Jumping", false);
         }
 
     }
@@ -314,49 +276,48 @@ public class Movement : MonoBehaviour
 
     IEnumerator ShadowDashingAnimation()
     {
-<<<<<<< Updated upstream
-        stateMachine.sprite.DOColor(Color.black, 0);
-=======
->>>>>>> Stashed changes
         stateMachine.playerRigidbody.transform.DOScaleX(originalX * xDashStretch, DashAnimationDuration);
         stateMachine.playerRigidbody.transform.DOScaleY(originalY * yDashStretch, DashAnimationDuration);
         yield return new WaitForSeconds(DashAnimationDuration);
         stateMachine.playerRigidbody.transform.DOScaleX(originalX, DashDuration - DashAnimationDuration);
         stateMachine.playerRigidbody.transform.DOScaleY(originalY, DashDuration - DashAnimationDuration);
-<<<<<<< Updated upstream
-        stateMachine.sprite.DOColor(stateMachine.originalColor, DashDuration - DashAnimationDuration);
-=======
->>>>>>> Stashed changes
     }
 
-    //--------------------------------------------------------------------------------- // COLLISIONS ZONE // -----------------------------------------------------------------------------
-    public void OnTriggerStay2D(Collider2D collision)
+    public IEnumerator LandingAnimation()
     {
-        if(collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Spikes") || collision.gameObject.CompareTag("Floor"))
-        {
-            stateMachine.boxCollider2D.isTrigger = false; 
-            stateMachine.isDashing = false;
-        }
-        if (collision.gameObject.CompareTag("SafePlace"))
-        {
-            lastSafePlace = stateMachine.playerRigidbody.position;
-        }
+        stateMachine.animator.SetBool("Landing", true);
+        yield return new WaitForSeconds(1);
+        stateMachine.animator.SetBool("Landing", false);
     }
-    //Verifica se ele ta em colisao
 
-    public void OnCollisionEnter2D(Collision2D collision)
+        //--------------------------------------------------------------------------------- // COLLISIONS ZONE // -----------------------------------------------------------------------------
+    void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            healthManager.Takedamage(1, collision.transform.position.x);
+        if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Spikes") || collision.gameObject.CompareTag("Floor"))
+           {
+                stateMachine.boxCollider2D.isTrigger = false;
+                stateMachine.isDashing = false;
+            }
+            if (collision.gameObject.CompareTag("SafePlace"))
+            {
+                lastSafePlace = stateMachine.playerRigidbody.position;
+            }
         }
+        //Verifica se ele ta em colisao
 
-        if (collision.gameObject.CompareTag("Floor"))
+        public void OnCollisionEnter2D(Collision2D collision)
         {
-            stateMachine.animator.SetTrigger("Landing");
-        }
-    }
+            if (collision.gameObject.CompareTag("Enemy"))
+            {
+                healthManager.Takedamage(1, collision.transform.position.x);
+            }
 
+            if (collision.gameObject.CompareTag("Floor"))
+            {
+            StartCoroutine(LandingAnimation());
+            }
+        }
+    
     protected virtual void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Floor"))
@@ -387,7 +348,7 @@ public class Movement : MonoBehaviour
         yield return new WaitForSeconds(jumpTime);
         stateMachine.onFloor =false;
         yield return new WaitForSeconds(jumpTime);
-        stateMachine.animator.SetTrigger("Falling");
+        //stateMachine.animator.SetTrigger("Falling");
 
     }
 
@@ -409,7 +370,7 @@ public class Movement : MonoBehaviour
         yield return new WaitForSeconds(jumpTime/1.3f);
         stateMachine.ableToDoubleJump = false;
         yield return new WaitForSeconds(jumpTime+(jumpTime-(jumpTime/1.3f)));
-        stateMachine.animator.SetTrigger("Falling");
+        //stateMachine.animator.SetTrigger("Falling");
     }
 
     
