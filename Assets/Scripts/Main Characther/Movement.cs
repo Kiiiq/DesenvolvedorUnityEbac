@@ -179,16 +179,19 @@ public class Movement : MonoBehaviour
              
             }
         }
-        
-        if (Input.GetKeyUp(Jump) && stateMachine.ableToJump)
-        {
-            stateMachine.ableToJump = false;
-            stateMachine.animator.SetBool("Jumping", false);
-        } else if (Input.GetKeyUp(Jump) && !stateMachine.ableToJump && stateMachine.ableToDoubleJump) {
-            stateMachine.ableToDoubleJump = false;
-            stateMachine.animator.SetBool("Jumping", false);
-        }
 
+        if (Input.GetKeyUp(Jump))
+        {
+            stateMachine.animator.SetBool("Jumping", false);
+            if ( stateMachine.ableToJump)
+            {
+                stateMachine.ableToJump = false;
+            }
+            else if (Input.GetKeyUp(Jump) && !stateMachine.ableToJump && stateMachine.ableToDoubleJump)
+            {
+                stateMachine.ableToDoubleJump = false;
+            }
+        }
     }
     
     
