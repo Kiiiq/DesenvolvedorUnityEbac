@@ -43,11 +43,11 @@ public class HitScript : MonoBehaviour
             Debug.Log("Hit");
             hittedRigbody=collision.GetComponent<Rigidbody2D>();
             healthManager=collision.GetComponent<HealthManager>();
-            if (actions.maxStamina > actions.stamina)
+            if (actions.actionSO.maxStamina > actions.actionSO.stamina)
             {
-                actions.stamina++;
+                actions.actionSO.stamina++;
             }
-            healthManager.Takedamage(actions.damage, movement.transform.position.x);
+            healthManager.Takedamage(actions.actionSO.damage, movement.transform.position.x);
             
         }
         

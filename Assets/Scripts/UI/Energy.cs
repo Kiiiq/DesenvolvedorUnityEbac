@@ -12,14 +12,14 @@ public class Energy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (energyCount > actions.stamina)
+        if (energyCount > actions.actionSO.stamina)
         {
             Destroy(EnergyPoints[energyCount - 1]);
             EnergyPoints.Remove(EnergyPoints[energyCount - 1]);
             energyCount--;
         }
 
-        if (energyCount < actions.stamina)
+        if (energyCount < actions.actionSO.stamina)
         {
             var obj = Instantiate(energyPoint, this.transform);
             EnergyPoints.Add(obj);

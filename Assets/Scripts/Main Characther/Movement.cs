@@ -7,38 +7,20 @@ using Unity.Mathematics;
 
 public class Movement : MonoBehaviour
 {
-    [Header ("References")]
+    [Header("References")]
     public Actions actions;
     public HealthManager healthManager;
     public StateMachine stateMachine;
     public GameObject spawnPoint;
     public GameObject ShadowIndicator;
 
-    [Header ("\n\nMovement")]
-    
+    [Header("\n\nMovement")]
+
     public Vector2 lastSafePlace;
-    
+
     public KeyCode Left = KeyCode.LeftArrow, Right = KeyCode.RightArrow, Jump = KeyCode.Z, Dash = KeyCode.LeftShift;
 
-    [Header("\n\nSpeed")]
-    [SerializeField]
-
-    public float actualSpeedx;
-    public float actualSpeedy;
-    public float Speed = 5;
-    
-    [Header("\n\nJump")]
-    
-    public float JumpDistance = 10;
-    public float jumpTime = 5;
-    public float Gravity = 10;
-    public float SpareJumpTime;
-
-    [Header("\n\nDash")]
-    
-    public float DashingMultipliyer;
-    public float DashDuration;
-    public float ShadowDashCD;
+    public MovementSO MoveSO;
 
 
     [Header("\n\nAnimation")]
@@ -71,7 +53,7 @@ public class Movement : MonoBehaviour
             HorizontalMove();
             DoubleJumpFunction();
             DashChecker();
-            
+
         }
 
         if (stateMachine.gambiarra)
@@ -79,9 +61,9 @@ public class Movement : MonoBehaviour
             stateMachine.gambiarra = false;
             this.transform.position = spawnPoint.transform.position;
         }
-        actualSpeedx= stateMachine.playerRigidbody.velocity.x;
-        actualSpeedy = stateMachine.playerRigidbody.velocity.y;
-        
+        MoveSO.actualSpeedx = stateMachine.playerRigidbody.velocity.x;
+        MoveSO.actualSpeedy = stateMachine.playerRigidbody.velocity.y;
+
     }
 
     //Tp pra uma posicao segura, quando ele cai em algum lugar que da dano
@@ -100,16 +82,17 @@ public class Movement : MonoBehaviour
                 StartCoroutine(ShadowDashing());
                 StartCoroutine(ShadowDashingAnimation());
             }
-            else { 
+            else
+            {
                 StartCoroutine(Dashing());
                 StartCoroutine(DashingAnimation());
             }
-            
-            
+
+
         }
     }
-   
-    
+
+
     //--------------------------------------------------------------------------------- // WALK ZONE // -----------------------------------------------------------------------------
     private void HorizontalMove()
     {
@@ -117,8 +100,8 @@ public class Movement : MonoBehaviour
         {
             if (Input.GetKey(Left))
             {
-                stateMachine.animator.SetBool("Walk",true);
-                stateMachine.playerRigidbody.velocity = new Vector2(-Speed, stateMachine.playerRigidbody.velocity.y);
+                stateMachine.animator.SetBool("Walk", true);
+                stateMachine.playerRigidbody.velocity = new Vector2(-MoveSO.Speed, stateMachine.playerRigidbody.velocity.y);
                 stateMachine.facingRight = false;
                 if (stateMachine.sprite.transform.rotation != new Quaternion(0, 180, 0, 0))
                 {
@@ -128,7 +111,7 @@ public class Movement : MonoBehaviour
             else if (Input.GetKey(Right))
             {
                 stateMachine.animator.SetBool("Walk", true);
-                stateMachine.playerRigidbody.velocity = new Vector2(Speed, stateMachine.playerRigidbody.velocity.y);
+                stateMachine.playerRigidbody.velocity = new Vector2(MoveSO.Speed, stateMachine.playerRigidbody.velocity.y);
                 stateMachine.facingRight = true;
                 if (stateMachine.sprite.transform.rotation != new Quaternion(0, 0, 0, 0))
                 {
@@ -144,46 +127,47 @@ public class Movement : MonoBehaviour
     }
 
 
-    
-    
+
+
     ////------------------------------------------------------------------------------------ // JUMP ZONE // -----------------------------------------------------------------------------
-   
-    protected virtual void DoubleJumpFunction() 
+
+    protected virtual void DoubleJumpFunction()
     {
-        if(!stateMachine.isCasting && !stateMachine.isDashing && !stateMachine.isTakingKnockback)
+        if (!stateMachine.isCasting && !stateMachine.isDashing && !stateMachine.isTakingKnockback)
         {
             if (Input.GetKey(Jump) && stateMachine.onFloor == true && stateMachine.ableToJump)
             {
                 stateMachine.ableToJump = true;
                 stateMachine.jumping = true;
-                stateMachine.playerRigidbody.velocity = new Vector2(stateMachine.playerRigidbody.velocity.x, JumpDistance);
+                stateMachine.playerRigidbody.velocity = new Vector2(stateMachine.playerRigidbody.velocity.x, MoveSO.JumpDistance);
                 stateMachine.playerRigidbody.gravityScale = 0;
                 stateMachine.animator.SetBool("Jumping", true);
-                
-            } else if (!stateMachine.ableToJump && stateMachine.ableToDoubleJump && stateMachine.doubleJump && Input.GetKey(Jump))
+
+            }
+            else if (!stateMachine.ableToJump && stateMachine.ableToDoubleJump && stateMachine.doubleJump && Input.GetKey(Jump))
             {
                 StartCoroutine(StopDoubleJump());
                 stateMachine.jumping = true;
-                stateMachine.playerRigidbody.velocity = new Vector2(stateMachine.playerRigidbody.velocity.x, JumpDistance);
+                stateMachine.playerRigidbody.velocity = new Vector2(stateMachine.playerRigidbody.velocity.x, MoveSO.JumpDistance);
                 stateMachine.playerRigidbody.gravityScale = 0;
                 stateMachine.animator.SetBool("Jumping", true);
             }
             else
             {
                 stateMachine.jumping = false;
-                stateMachine.playerRigidbody.gravityScale = Gravity;
+                stateMachine.playerRigidbody.gravityScale = MoveSO.Gravity;
             }
 
-            if ((Input.GetKeyDown(Jump) && stateMachine.onFloor == true && stateMachine.ableToJump)|| (!stateMachine.ableToJump && stateMachine.ableToDoubleJump && stateMachine.doubleJump && Input.GetKeyDown(Jump)))
+            if ((Input.GetKeyDown(Jump) && stateMachine.onFloor == true && stateMachine.ableToJump) || (!stateMachine.ableToJump && stateMachine.ableToDoubleJump && stateMachine.doubleJump && Input.GetKeyDown(Jump)))
             {
-             
+
             }
         }
 
         if (Input.GetKeyUp(Jump))
         {
             stateMachine.animator.SetBool("Jumping", false);
-            if ( stateMachine.ableToJump)
+            if (stateMachine.ableToJump)
             {
                 stateMachine.ableToJump = false;
             }
@@ -193,19 +177,22 @@ public class Movement : MonoBehaviour
             }
         }
     }
-    
-    
-    
-    
+
+
+
+
     //------------------------------------------------------------------------------------- // DASH ZONE // -----------------------------------------------------------------------------
     //Verifica a direcao que o personagem ta olhando, Mostra que ele esta dashando, e desabilita a habilidade de Dashar dnv
     protected virtual IEnumerator Dashing()
     {
-        if (stateMachine.facingRight){
+        if (stateMachine.facingRight)
+        {
 
             StartCoroutine(ReallyDashing(1));
 
-        } else {
+        }
+        else
+        {
 
             StartCoroutine(ReallyDashing(-1));
 
@@ -218,10 +205,10 @@ public class Movement : MonoBehaviour
         stateMachine.isDashing = true;
         stateMachine.ableToDash = false;
         stateMachine.playerRigidbody.gravityScale = 0;
-        stateMachine.playerRigidbody.velocity = new Vector2(Speed*direction * DashingMultipliyer, 0);
-        yield return new WaitForSeconds(DashDuration);
-        stateMachine.playerRigidbody.gravityScale = Gravity;
-        stateMachine.playerRigidbody.velocity = new Vector2(Speed, 0);
+        stateMachine.playerRigidbody.velocity = new Vector2(MoveSO.Speed * direction * MoveSO.DashingMultipliyer, 0);
+        yield return new WaitForSeconds(MoveSO.DashDuration);
+        stateMachine.playerRigidbody.gravityScale = MoveSO.Gravity;
+        stateMachine.playerRigidbody.velocity = new Vector2(MoveSO.Speed, 0);
         stateMachine.isDashing = false;
     }
 
@@ -231,7 +218,7 @@ public class Movement : MonoBehaviour
     {
         if (stateMachine.facingRight)
         {
-            StartCoroutine (ReallyShadowDashing(1));
+            StartCoroutine(ReallyShadowDashing(1));
             StartCoroutine(ShadowCooldown());
         }
         else
@@ -248,10 +235,10 @@ public class Movement : MonoBehaviour
         stateMachine.isDashing = true;
         stateMachine.ableToDash = false;
         stateMachine.playerRigidbody.gravityScale = 0;
-        stateMachine.playerRigidbody.velocity = new Vector2(Speed*direction * DashingMultipliyer, 0);
-        yield return new WaitForSeconds(DashDuration);
-        stateMachine.playerRigidbody.gravityScale = Gravity;
-        stateMachine.playerRigidbody.velocity = new Vector2(Speed, 0);
+        stateMachine.playerRigidbody.velocity = new Vector2(MoveSO.Speed * direction * MoveSO.DashingMultipliyer, 0);
+        yield return new WaitForSeconds(MoveSO.DashDuration);
+        stateMachine.playerRigidbody.gravityScale = MoveSO.Gravity;
+        stateMachine.playerRigidbody.velocity = new Vector2(MoveSO.Speed, 0);
         stateMachine.boxCollider2D.isTrigger = false;
         stateMachine.isDashing = false;
 
@@ -261,20 +248,20 @@ public class Movement : MonoBehaviour
     {
         ShadowIndicator.SetActive(false);
         stateMachine.ableToShadowDash = false;
-        yield return new WaitForSeconds(ShadowDashCD);
+        yield return new WaitForSeconds(MoveSO.ShadowDashCD);
         stateMachine.ableToShadowDash = true;
         ShadowIndicator.SetActive(true);
     }
 
     //--------------------------------------------------------------------------------- // ANIMATION ZONE // -----------------------------------------------------------------------------
     //Animacao pra o dash
-    IEnumerator DashingAnimation() 
+    IEnumerator DashingAnimation()
     {
-        stateMachine.playerRigidbody.transform.DOScaleX(originalX*xDashStretch, DashAnimationDuration);
-        stateMachine.playerRigidbody.transform.DOScaleY(originalY*yDashStretch, DashAnimationDuration);
+        stateMachine.playerRigidbody.transform.DOScaleX(originalX * xDashStretch, DashAnimationDuration);
+        stateMachine.playerRigidbody.transform.DOScaleY(originalY * yDashStretch, DashAnimationDuration);
         yield return new WaitForSeconds(DashAnimationDuration);
-        stateMachine.playerRigidbody.transform.DOScaleX(originalX, DashDuration - DashAnimationDuration);
-        stateMachine.playerRigidbody.transform.DOScaleY(originalY, DashDuration - DashAnimationDuration);
+        stateMachine.playerRigidbody.transform.DOScaleX(originalX, MoveSO.DashDuration - DashAnimationDuration);
+        stateMachine.playerRigidbody.transform.DOScaleY(originalY, MoveSO.DashDuration - DashAnimationDuration);
     }
 
     IEnumerator ShadowDashingAnimation()
@@ -282,8 +269,8 @@ public class Movement : MonoBehaviour
         stateMachine.playerRigidbody.transform.DOScaleX(originalX * xDashStretch, DashAnimationDuration);
         stateMachine.playerRigidbody.transform.DOScaleY(originalY * yDashStretch, DashAnimationDuration);
         yield return new WaitForSeconds(DashAnimationDuration);
-        stateMachine.playerRigidbody.transform.DOScaleX(originalX, DashDuration - DashAnimationDuration);
-        stateMachine.playerRigidbody.transform.DOScaleY(originalY, DashDuration - DashAnimationDuration);
+        stateMachine.playerRigidbody.transform.DOScaleX(originalX, MoveSO.DashDuration - DashAnimationDuration);
+        stateMachine.playerRigidbody.transform.DOScaleY(originalY, MoveSO.DashDuration - DashAnimationDuration);
     }
 
     public IEnumerator LandingAnimation()
@@ -293,45 +280,45 @@ public class Movement : MonoBehaviour
         stateMachine.animator.SetBool("Landing", false);
     }
 
-        //--------------------------------------------------------------------------------- // COLLISIONS ZONE // -----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------- // COLLISIONS ZONE // -----------------------------------------------------------------------------
     void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Spikes") || collision.gameObject.CompareTag("Floor"))
-           {
-                stateMachine.boxCollider2D.isTrigger = false;
-                stateMachine.isDashing = false;
-            }
-            if (collision.gameObject.CompareTag("SafePlace"))
-            {
-                lastSafePlace = stateMachine.playerRigidbody.position;
-            }
-        }
-        //Verifica se ele ta em colisao
-
-        public void OnCollisionEnter2D(Collision2D collision)
         {
-            if (collision.gameObject.CompareTag("Enemy"))
-            {
-                healthManager.Takedamage(1, collision.transform.position.x);
-            }
-
-            if (collision.gameObject.CompareTag("Floor"))
-            {
-            StartCoroutine(LandingAnimation());
-            }
+            stateMachine.boxCollider2D.isTrigger = false;
+            stateMachine.isDashing = false;
         }
-    
+        if (collision.gameObject.CompareTag("SafePlace"))
+        {
+            lastSafePlace = stateMachine.playerRigidbody.position;
+        }
+    }
+    //Verifica se ele ta em colisao
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            healthManager.Takedamage(1, collision.transform.position.x);
+        }
+
+        if (collision.gameObject.CompareTag("Floor"))
+        {
+            StartCoroutine(LandingAnimation());
+        }
+    }
+
     protected virtual void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Floor"))
-        {            
+        {
             stateMachine.onFloor = true;
             stateMachine.ableToDash = true;
             stateMachine.ableToJump = true;
-            stateMachine.ableToDoubleJump = true;            
+            stateMachine.ableToDoubleJump = true;
         }
 
-       
+
     }
 
     //Invoca as co-rotinas de limite de pulo
@@ -348,9 +335,9 @@ public class Movement : MonoBehaviour
     //--------------------------------------------------------------------------------- // STOP JUMP ZONE // -----------------------------------------------------------------------------
     IEnumerator FloorExit()
     {
-        yield return new WaitForSeconds(jumpTime);
-        stateMachine.onFloor =false;
-        yield return new WaitForSeconds(jumpTime);
+        yield return new WaitForSeconds(MoveSO.jumpTime);
+        stateMachine.onFloor = false;
+        yield return new WaitForSeconds(MoveSO.jumpTime);
         //stateMachine.animator.SetTrigger("Falling");
 
     }
@@ -360,7 +347,7 @@ public class Movement : MonoBehaviour
     {
         if (!stateMachine.jumping)
         {
-            yield return new WaitForSeconds(SpareJumpTime);
+            yield return new WaitForSeconds(MoveSO.SpareJumpTime);
             stateMachine.ableToJump = false;
         }
 
@@ -370,11 +357,11 @@ public class Movement : MonoBehaviour
 
     IEnumerator StopDoubleJump()
     {
-        yield return new WaitForSeconds(jumpTime/1.3f);
+        yield return new WaitForSeconds(MoveSO.jumpTime / 1.3f);
         stateMachine.ableToDoubleJump = false;
-        yield return new WaitForSeconds(jumpTime+(jumpTime-(jumpTime/1.3f)));
+        yield return new WaitForSeconds(MoveSO.jumpTime + (MoveSO.jumpTime - (MoveSO.jumpTime / 1.3f)));
         //stateMachine.animator.SetTrigger("Falling");
     }
 
-    
+
 }

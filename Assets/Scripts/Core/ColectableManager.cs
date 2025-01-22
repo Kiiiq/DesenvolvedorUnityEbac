@@ -6,17 +6,17 @@ using TMPro;
 
 public class ColectableManager : Singleton<ColectableManager>
 {
-    [SerializeField] public int coinsCollected;
+    [SerializeField] public SOInt coinsCollected;
     [SerializeField] GameObject coinUI;
     [SerializeField] TextMeshProUGUI collectedCoins;
 
 
     public void CollectingCoin(int value)
     {
-        coinsCollected += value;
+        coinsCollected.value += value;
         StopCoroutine(ShowCoins());
         StartCoroutine(ShowCoins());
-        collectedCoins.text = coinsCollected.ToString();
+        collectedCoins.text = coinsCollected.value.ToString();
     }
 
     IEnumerator ShowCoins()
