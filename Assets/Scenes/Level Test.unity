@@ -2599,7 +2599,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e342a10bf18f68247845351bf04ee4fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coinsCollected: 0
+  coinsCollected: {fileID: 11400000, guid: cdccc0d6f9e2e49409be4629c7bb4374, type: 2}
   coinUI: {fileID: 2039715002}
   collectedCoins: {fileID: 1793534651}
 --- !u!4 &963573415
@@ -3350,7 +3350,7 @@ Camera:
   far clip plane: 1000
   field of view: 59.59369
   orthographic: 1
-  orthographic size: 12.5
+  orthographic size: 6.18
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

@@ -17,5 +17,5 @@ MonoBehaviour:
   timeToHeal: 0.8
   damage: 1
   maxStamina: 9
-  stamina: 0
+  stamina: 1
   staminaToCast: 3

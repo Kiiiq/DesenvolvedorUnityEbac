@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d66e45b0e62c64d43b5422865dd0256f, type: 3}
   m_Name: SOCoins
   m_EditorClassIdentifier: 
-  value: 0
+  value: 47
