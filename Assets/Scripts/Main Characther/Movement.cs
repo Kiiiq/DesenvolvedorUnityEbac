@@ -8,11 +8,13 @@ using Unity.Mathematics;
 public class Movement : MonoBehaviour
 {
     [Header("References")]
+    public ParticleSystem dust;
+    public ParticleSystem jumpVFX;
     public Actions actions;
     public HealthManager healthManager;
     public StateMachine stateMachine;
     public GameObject spawnPoint;
-    public GameObject ShadowIndicator;
+    public ParticleSystem ShadowIndicator;
 
     [Header("\n\nMovement")]
 
@@ -137,6 +139,7 @@ public class Movement : MonoBehaviour
         {
             if (Input.GetKey(Jump) && stateMachine.onFloor == true && stateMachine.ableToJump)
             {
+                
                 stateMachine.ableToJump = true;
                 stateMachine.jumping = true;
                 stateMachine.playerRigidbody.velocity = new Vector2(stateMachine.playerRigidbody.velocity.x, MoveSO.JumpDistance);
@@ -146,6 +149,7 @@ public class Movement : MonoBehaviour
             }
             else if (!stateMachine.ableToJump && stateMachine.ableToDoubleJump && stateMachine.doubleJump && Input.GetKey(Jump))
             {
+                
                 StartCoroutine(StopDoubleJump());
                 stateMachine.jumping = true;
                 stateMachine.playerRigidbody.velocity = new Vector2(stateMachine.playerRigidbody.velocity.x, MoveSO.JumpDistance);
@@ -162,6 +166,11 @@ public class Movement : MonoBehaviour
             {
 
             }
+        }
+
+        if (Input.GetKeyDown(Jump) && (stateMachine.ableToJump || (stateMachine.ableToDoubleJump && stateMachine.doubleJump)))
+        {
+            jumpVFX.Play(); 
         }
 
         if (Input.GetKeyUp(Jump))
@@ -246,11 +255,10 @@ public class Movement : MonoBehaviour
 
     IEnumerator ShadowCooldown()
     {
-        ShadowIndicator.SetActive(false);
         stateMachine.ableToShadowDash = false;
         yield return new WaitForSeconds(MoveSO.ShadowDashCD);
         stateMachine.ableToShadowDash = true;
-        ShadowIndicator.SetActive(true);
+        ShadowIndicator.Play();
     }
 
     //--------------------------------------------------------------------------------- // ANIMATION ZONE // -----------------------------------------------------------------------------
@@ -305,6 +313,7 @@ public class Movement : MonoBehaviour
         if (collision.gameObject.CompareTag("Floor"))
         {
             StartCoroutine(LandingAnimation());
+            dust.enableEmission = true;
         }
     }
 
@@ -328,6 +337,7 @@ public class Movement : MonoBehaviour
         {
             StartCoroutine(FloorExit());
             StartCoroutine(SpareTimetojump());
+            dust.enableEmission = false;
         }
     }
     //Os dois seguem a mesma logica, limita o tanto que o personagem vai pular
