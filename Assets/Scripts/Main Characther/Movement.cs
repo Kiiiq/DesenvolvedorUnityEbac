@@ -8,6 +8,7 @@ using Unity.Mathematics;
 public class Movement : MonoBehaviour
 {
     [Header("References")]
+    public AudioSource jumpSFX;
     public ParticleSystem dust;
     public ParticleSystem jumpVFX;
     public Actions actions;
@@ -170,7 +171,8 @@ public class Movement : MonoBehaviour
 
         if (Input.GetKeyDown(Jump) && (stateMachine.ableToJump || (stateMachine.ableToDoubleJump && stateMachine.doubleJump)))
         {
-            jumpVFX.Play(); 
+            jumpVFX.Play();
+            jumpSFX.Play();
         }
 
         if (Input.GetKeyUp(Jump))

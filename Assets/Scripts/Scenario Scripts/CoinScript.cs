@@ -10,7 +10,6 @@ public class CoinScript : CollectableScript
     [SerializeField] private float rotationSpeed=5;
     private GameObject CollectableManager;
     private ColectableManager colectableManager;
-    
 
 
     
@@ -21,7 +20,6 @@ public class CoinScript : CollectableScript
         colectableManager = CollectableManager.GetComponent<ColectableManager>();
 
         colectableManager.CollectingCoin(coinValue);
-
         coinParticles.PlayParticles();
     }
 
