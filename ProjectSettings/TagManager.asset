@@ -4,16 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Floor
-  - Wall
-  - Ceilling
-  - Spikes
-  - Attack
+  - Scenario
   - Enemy
-  - SafePlace
-  - Collectable
-  - Turning Point
-  - TpPlace
   layers:
   - Default
   - TransparentFX
