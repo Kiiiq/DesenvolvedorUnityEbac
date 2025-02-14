@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Scenario
   - Enemy
+  - FinishingLine
+  - CoinCollector
   layers:
   - Default
   - TransparentFX

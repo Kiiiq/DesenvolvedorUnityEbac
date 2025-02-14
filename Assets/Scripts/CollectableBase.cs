@@ -9,16 +9,23 @@ public class CollectableBase : MonoBehaviour
     public AudioSource audioSource;
     public float timeToHide;
     public string Tag="Player";
+    [SerializeField] public CharacterMovement characterMovement;
+
+
+    private void Start()
+    {
+        characterMovement=FindObjectOfType<CharacterMovement>();
+    }
 
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.transform.tag=="Player")
+        if (collision.transform.tag==Tag)
         {
             Collect();
         }
     }
 
-    protected void Collect()
+    protected virtual void Collect()
     {
         if (graphicItem != null) { graphicItem.SetActive(false); }
         Invoke("HideObject", timeToHide);
@@ -30,7 +37,7 @@ public class CollectableBase : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
-    public void OnCollect()
+    protected virtual void OnCollect()
     {
         if (particleSystem != null) { particleSystem.Play(); }
         if (audioSource != null) { audioSource.Play(); }

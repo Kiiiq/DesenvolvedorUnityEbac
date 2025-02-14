@@ -341,9 +341,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6947515749490476149}
-  - component: {fileID: 2225929945082015048}
   - component: {fileID: 7177625010649012097}
-  - component: {fileID: 2040187073214555002}
   - component: {fileID: -9035067765881190551}
   m_Layer: 0
   m_Name: CollectablePrefab
@@ -368,23 +366,6 @@ Transform:
   - {fileID: 4650720121540597684}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2225929945082015048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8699606749934176361}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64003467810965a44bbafd441a0e4615, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  graphicItem: {fileID: 8904108638229005295}
-  particleSystem: {fileID: 0}
-  audioSource: {fileID: 0}
-  timeToHide: 3
-  Tag: Player
 --- !u!135 &7177625010649012097
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -406,33 +387,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &2040187073214555002
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8699606749934176361}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!114 &-9035067765881190551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -445,8 +399,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0559dca6541048e4ebbb502ddf689574, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  graphicItem: {fileID: 8904108638229005295}
+  particleSystem: {fileID: 0}
+  audioSource: {fileID: 0}
+  timeToHide: 3
+  Tag: CoinCollector
+  characterMovement: {fileID: 0}
   speedRotation: 60
   model: {fileID: 8904108638229005295}
+  lerpSpeed: 10.87
+  minDistance: 0.5
 --- !u!1 &8904108638229005295
 GameObject:
   m_ObjectHideFlags: 0
