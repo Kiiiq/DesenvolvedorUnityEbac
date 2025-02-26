@@ -12,6 +12,7 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] public GameObject CoinCollector;
     [SerializeField] public Rigidbody playerRigidbody;
     [SerializeField] public BoxCollider Collider;
+    [SerializeField] public AnimatorManager animatorManager;
     
     
 
@@ -46,6 +47,7 @@ public class CharacterMovement : MonoBehaviour
         {
             _isDead = true;
             deathScreen.SetActive(true);
+            animatorManager.play(AnimatorManager.animationClip.death);
         }
     }
 
@@ -54,11 +56,13 @@ public class CharacterMovement : MonoBehaviour
         if (collider.transform.CompareTag("FinishingLine")){
             _isDead = true;
             deathScreen.SetActive(true);
+            animatorManager.play(AnimatorManager.animationClip.idle);
         }
     }
 
     public void StartGame()
     {
+        animatorManager.play(AnimatorManager.animationClip.run);
         started = true;
     }
 }
