@@ -2,23 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ReusableScripts;
+using TMPro;
 
 public class ColectableManager : Singleton<ColectableManager>
 {
-    [SerializeField] public int coinsCollected;
-    [SerializeField] GameObject CoinUI;
+    [SerializeField] public SOInt coinsCollected;
+    [SerializeField] GameObject coinUI;
+    [SerializeField] TextMeshProUGUI collectedCoins;
 
 
     public void CollectingCoin(int value)
     {
-        coinsCollected += value;
+        coinsCollected.value += value;
+        StopCoroutine(ShowCoins());
         StartCoroutine(ShowCoins());
+        collectedCoins.text = coinsCollected.value.ToString();
     }
 
     IEnumerator ShowCoins()
     {
-        CoinUI.gameObject.SetActive(true);
+        coinUI.gameObject.SetActive(true);
         yield return new WaitForSeconds(5f);
-        CoinUI.gameObject.SetActive(false);
+        coinUI.gameObject.SetActive(false);
     }
 }

@@ -83,7 +83,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5189117484956590764}
   - component: {fileID: 5959604229596727322}
-  - component: {fileID: 3860671380134901377}
   - component: {fileID: 915139066215855961}
   - component: {fileID: 8843121071768924971}
   - component: {fileID: 1835677171204871392}
@@ -110,10 +109,7 @@ Transform:
   m_Children:
   - {fileID: 6453491100798792517}
   - {fileID: 5833116360631867036}
-<<<<<<< Updated upstream
-=======
   - {fileID: 115227928815687737}
->>>>>>> Stashed changes
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5959604229596727322
@@ -137,48 +133,6 @@ MonoBehaviour:
   currentLife: 0
   deathAnimation: 0
   knockbackTime: 0.2
---- !u!114 &3860671380134901377
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3387788094983616745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c0eb971093af114ab3e31692cf3ab63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movement: {fileID: 8843121071768924971}
-  healthManager: {fileID: 5959604229596727322}
-  sprite: {fileID: 184415284044529798}
-  Hitbox: {fileID: 497501042251598873, guid: 98a6123696d858a4b9776eb92a265633, type: 3}
-  Spell: {fileID: 3189504666559423414, guid: 756bdb0a2eb582e4d99984c8272baf30, type: 3}
-  Slash: {fileID: 4779739491084950115, guid: a6175f2450069df469494ddd2ac5ea34, type: 3}
-  playerRigidbody: {fileID: 9070515551059329770}
-  actions: {fileID: 915139066215855961}
-  boxCollider2D: {fileID: 1835677171204871392}
-  originalColor: {r: 0.43529412, g: 0.007843138, b: 0.05882353, a: 1}
-  ableToDash: 0
-  ableToJump: 0
-  ableToDoubleJump: 0
-  ableToSpell: 0
-  ableToShadowDash: 0
-  spellUpgraded: 0
-  slashUpgraded: 0
-  doubleJump: 0
-  ShadowDash: 0
-  isDead: 0
-  isAttacking: 0
-  isCasting: 0
-  isHealing: 0
-  isDashing: 0
-  facingRight: 0
-  onFloor: 0
-  jumping: 0
-  isTakingKnockback: 0
-  isImune: 0
-  gambiarra: 0
 --- !u!114 &915139066215855961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,7 +150,7 @@ MonoBehaviour:
   attackRight: {x: 0, y: 0, z: 0}
   attackDown: {x: 0, y: 0, z: 270}
   movement: {fileID: 8843121071768924971}
-  stateMachine: {fileID: 3860671380134901377}
+  stateMachine: {fileID: 0}
   healthManager: {fileID: 5959604229596727322}
   attackKey: 120
   attackUpKey: 273
@@ -229,7 +183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actions: {fileID: 915139066215855961}
   healthManager: {fileID: 5959604229596727322}
-  stateMachine: {fileID: 3860671380134901377}
+  stateMachine: {fileID: 0}
   spawnPoint: {fileID: 0}
   ShadowIndicator: {fileID: 6331961844783509225}
   lastSafePlace: {x: 0, y: 0}
@@ -237,6 +191,8 @@ MonoBehaviour:
   Right: 275
   Jump: 122
   Dash: 304
+  actualSpeedx: 0
+  actualSpeedy: 0
   Speed: 13
   JumpDistance: 25
   jumpTime: 0.3

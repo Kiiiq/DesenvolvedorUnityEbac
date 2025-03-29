@@ -46,7 +46,7 @@ public class SpellScript : MonoBehaviour
             Debug.Log("Hit");
             hittedRigbody = collision.GetComponent<Rigidbody2D>();
             healthManager = collision.GetComponent<HealthManager>();
-            healthManager.Takedamage(actions.damage * damageMultipliyer, movement.transform.position.x);
+            healthManager.Takedamage(actions.actionSO.damage * damageMultipliyer, movement.transform.position.x);
 
         }
 
