@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using DG.Tweening;
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] public Rigidbody playerRigidbody;
     [SerializeField] public BoxCollider Collider;
     [SerializeField] public AnimatorManager animatorManager;
+    [SerializeField] public ParticleSystem particleSystem;
     
     
 
@@ -21,9 +23,13 @@ public class CharacterMovement : MonoBehaviour
     [Range(1f, 20f)] public float positionDivisor=1;
     [Range(0f, 50f)] public float fowardSpeed;
     [Range(0f, 5f)] public float sideSpeed;
+    public float limits;
     [SerializeField]private bool _isDead;
     public bool started = false;
     public bool Invincible;
+    
+
+    
 
     private void Start()
     {
@@ -57,6 +63,7 @@ public class CharacterMovement : MonoBehaviour
             _isDead = true;
             deathScreen.SetActive(true);
             animatorManager.play(AnimatorManager.animationClip.idle);
+            particleSystem.Play();
         }
     }
 
@@ -65,4 +72,5 @@ public class CharacterMovement : MonoBehaviour
         animatorManager.play(AnimatorManager.animationClip.run);
         started = true;
     }
+
 }

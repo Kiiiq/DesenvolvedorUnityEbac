@@ -10,11 +10,14 @@ public class CollectableBase : MonoBehaviour
     public float timeToHide;
     public string Tag="Player";
     [SerializeField] public CharacterMovement characterMovement;
+    [SerializeField] public CharactherAnimation characterAnimation;
+    [SerializeField] public GameObject sprite;
 
 
-    private void Start()
+    protected virtual void Start()
     {
         characterMovement=FindObjectOfType<CharacterMovement>();
+        
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -39,7 +42,10 @@ public class CollectableBase : MonoBehaviour
 
     protected virtual void OnCollect()
     {
-        if (particleSystem != null) { particleSystem.Play(); }
+        if (particleSystem != null) {
+            particleSystem.transform.SetParent(null);
+            particleSystem.Play(); 
+        }
         if (audioSource != null) { audioSource.Play(); }
     }
 }
